@@ -3,40 +3,121 @@
 
 
 \section{Ausgangslage}\label{sec:ausgangslage}
-...
+Der \textit{Getting Started Wizard} ist ein stark vereinfachter Config Editor in Airlock SaaS, mit welchem unsere Kunden möglichst schnell und einfach eine funktionsfähige Konfiguration für ihr Tenant IAM erstellen können.
+Eine solche Konfiguration beinhaltet sensible Daten, sogenannte \textit{Secrets}.
+Ein Secret bezeichnet vertrauliche Informationen wie Schlüssel, Passwörter, Tokens, oder Zertifikate.
+Der Schutz dieser Daten vor unbefugtem Zugriff ist entscheidend.
+Eine besondere Sicherheitsmassnahme in Airlock SaaS ist daher, dass Secrets separat in einem Vault, einer speziell für Secrets vorgesehenen Datenbank, und nicht in der Applikationsdatenbank abgespeichert werden.
 
+Für den generellen Use Case von Airlock SaaS sind diese Secrets sowie die Integration mit einem Vault vollständig implementiert.
+Im Getting Started Wizard hingegen fehlt diese Integration und Secrets werden nicht speziell berücksichtigt.
+
+Die Herausforderung innerhalb dieses Projekts besteht darin, den sicheren Umgang mit Secrets nahtlos in den Getting Started Wizard zu integrieren.
 
 \section{Detaillierte Aufgabenstellung}\label{sec:detaillierte-aufgabenstellung}
-...
+\subsection{Analyse}\label{subsec:detailierte-aufgabenstellung-anayse}
+Der Kandidat analysiert die existierende Standardkonfiguration sowie die bestehenden Konfigurationsmöglichkeiten auf deren Verwendung von Secrets und identifiziert diese.
 
+\paragraph{Konkret möchten wir in Erfahrung bringen}
+\begin{itemize}
+    \item Um welche Secrets es sich handelt
+    \item Welche Anforderungen diese Secrets verlangen (e.g. HMAC-SHA256)
+    \item Ob eine Nutzerinteraktion notwendig ist, i.e. ob Anwender das Secret sehen und anpassen können müssen
+\end{itemize}
+
+\paragraph{Die folgenden Resultate werden erwartet:}
+\begin{itemize}
+    \item Welche Secrets gitb es?
+    \item Pro Secret
+        \begin{itemize}
+              \item Benötigt dieses Secret ein spezifisches Format?
+              \item Könnte ein solches Secret generiert werden?
+              \item Muss dieses Secret angepasst werden können?
+        \end{itemize}
+    \item Abhängig von den Antworten zu den oberen Fragen soll zusätzlich beantwortet werden, ob es sinnvoll ist, verschiedene Arten von Secrets zu implementieren.
+        Die Antwort ist zu begründen.
+        Falls es Sinn macht, sind die Implementationsarten zu erstellen.
+\end{itemize}
+
+\subsection{Integration}\label{subsec:detailierte-aufgabenstellung-integration}
+In einem nächsten Schritt soll für alle verschiedenen Secrets eine Integrationslösung erarbeitet und implementiert werden.
+Secrets, welche keine Interaktion benötigen, sollen automatisch erstellt werden und für den Anwender unsichtbar sein.
+Secrets, welche eine Interaktion benötigen, müssen abgefragt werden.
+Darüber hinaus soll die Verwendung von Secrets im Getting Started Wizard vereinfacht werden, indem ein Anwender ein Secret im Modal aus einer Liste (Dropdown) auswählen kann.
+
+\paragraph{Die folgenden funktionalen Anforderungen müssen erfüllt sein:}
+
+\begin{enumerate}[label=A\arabic*:, leftmargin=*, itemsep=0.25em]
+    \item Secrets werden automatisch zusammen mit dem Tenant erstellt und sind sofort für den Getting Started Wizard verfügbar
+    \item Der Tenant darf nicht erstellt werden, wenn es einen Fehler beim Erstellen der Secrets gibt
+    \item Secrets, welche nicht vom Benutzer überschrieben werden können, dürfen für den Benutzer auch nicht sichtbar sein
+    \item Secrets müssen richtig in die Config Transformation integriert und für das Tenant IAM verwendet werden
+    \item Die Inhalte der Secrets dürfen nicht für Anwender sichtbar sein, auch nicht in der Config (ZIP Download)
+    \item Secret-Konfiguration im Getting Started Wizard
+    \begin{enumerate}[label=A\arabic{enumi}\alph*:, leftmargin=*, itemsep=0.1em]
+        \item Secrets, welche direkt im Getting Started Wizard konfiguriert werden müssen, sollen via Dropdown verfügbar sein
+        \item Die Richtigkeit der Secret Referenz muss überprüft und sichergestellt werden
+    \end{enumerate}
+    \item Secrets müssen korrekt und vollständig in die Konfiguration eingefügt werden
+\end{enumerate}
 
 \section{Mittel und Methoden}\label{sec:mittel-und-methoden}
 
-\paragraph{Technologien und Tools}
+\paragraph{Technologien Backend}
 \begin{itemize}
-    \item ...
+    \item Kotlin
+    \item Spring
+    \item Spring Events
+    \item MongoDB
+    \item Hashicorp Vault
+    \item OpenAPI
+\end{itemize}
+
+\paragraph{Technologien Frontend}
+\begin{itemize}
+    \item React
+    \item TypeScript
+    \item React Hook From
+\end{itemize}
+
+\paragraph{Tools}
+\begin{itemize}
+    \item IntelliJ
+    \item Git
+    \item Gradle
+    \item Windsurf
+\end{itemize}
+
+\paragraph{Architektur}
+\begin{itemize}
+    \item Microservices
+    \item REST API
 \end{itemize}
 
 
 \section{Vorkenntnisse}\label{sec:vorkenntnisse}
 \begin{itemize}
-    \item ...
+    \item Die Architektur, die Entwicklungsumgebung sowie unsere CI/CD Pipeline sind dem Lernenden bekannt.
+    \item Er ist darüber hinaus auch mit den meisten Komponenten im Projekt bereits vertraut, da er bei vielen Features bereits mitwirken konnte.
+    \item Er arbeitet seit ca. 12 Monaten in unserem Team.
 \end{itemize}
 
 
 \section{Vorarbeiten}\label{sec:vorarbeiten}
-\begin{itemize}
-    \item ...
-\end{itemize}
-
+Es wurden keine spezifischen Vorarbeiten getätigt.
+Da der Auszubildende bereits produktiv auf dem Projekt arbeitet, ist die Entwicklungsumgebung bereits vollständig aufgesetzt.
 
 \section{Neue Lerninhalte}\label{sec:neue-lerninhalte}
 \begin{itemize}
-    \item ...
+    \item Domain Design Secrets
+    \item Secret Management
+    \item Hashicorp Vault
 \end{itemize}
 
 
 \section{Arbeiten in den letzten 6 Monaten}\label{sec:arbeiten-in-den-letzten-6-monaten}
 \begin{itemize}
-    \item ...
+    \item Features und Fixes im Airlock SaaS IAM
+    \item Features und Fixes generell im Frontend sowie im Backend
+    \item Features und Fixes im Getting Started Wizard
 \end{itemize}
